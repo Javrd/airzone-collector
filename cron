@@ -1,0 +1,3 @@
+# Execute every 10 minutes and redirect output to file
+# m h  dom mon dow   command
+*/10  * * * * python /path/to/airzone-collector/get_data.py >> /path/to/airzone-collector/cron.log 2>&1
