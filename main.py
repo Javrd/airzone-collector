@@ -3,6 +3,7 @@ import logging
 from time import time
 
 from influxdb import InfluxDBClient
+from influxdb.exceptions import InfluxDBClientError
 
 from api import AirZoneAPI
 from models import DeviceStatus, InfluxAPI
@@ -26,11 +27,17 @@ if __name__ == '__main__':
                 logger.warning(warning.id)
             for error in device_status.errors:
                 logger.error(error.id)
-                
+
         client.write_points(data,
-                            database='sensorhome',
+                            database='airzone',
                             time_precision='ms',
                             batch_size=10000,
                             protocol='json')
-    except:
+    except InfluxDBClientError as error:
+        if error.code == 404:
+            client.create_database('airzone')
+        else:
+            raise error
+    except Exception as error:
         logger.exception('Unexpected error')
+        raise error

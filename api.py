@@ -1,9 +1,10 @@
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 import yaml
 
-from utils import update_settings
+from utils import cwd, update_settings
 
 
 class AirZoneAPI():
@@ -11,7 +12,7 @@ class AirZoneAPI():
 
     def __init__(self):
 
-        with open('.settings.yaml', 'r') as f:
+        with open(os.path.join(cwd, '.settings.yaml'), 'r') as f:
             settings: dict = yaml.safe_load(f)
 
         token = settings.get('token', '')

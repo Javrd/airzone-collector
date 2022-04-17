@@ -1,5 +1,5 @@
-import json
 from typing import List
+
 from influxdb import InfluxDBClient
 
 
@@ -172,9 +172,9 @@ class InfluxAPI(InfluxDBClient):
                 "mode": device_status.mode,
                 "power": device_status.power
         }
-        temp = device_status.local_temp.celsius
+        temp = float(device_status.local_temp.celsius)
         data.append(cls.__set_point("temperature", tags, temp, timestamp))
-        data.append(cls.__set_point("humidity", tags, device_status.humidity, timestamp))
+        data.append(cls.__set_point("humidity", tags, int(device_status.humidity), timestamp))
         return data
     
     @staticmethod
